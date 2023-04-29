@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.cj": "cpp",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "crosswind.h": "c"
     }
 }

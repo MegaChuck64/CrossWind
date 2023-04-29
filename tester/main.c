@@ -3,7 +3,7 @@
 
 int main()
 {
-    struct CrossRect windowRect = {0, 0, 800, 600};
+    struct CrossRect windowRect = {0, 0, 400, 400};
 
     struct CrossWindow window;
 
@@ -13,20 +13,20 @@ int main()
     printf("Window: %s\n", window.title);
     printf("Window Rect: %d, %d, %d, %d\n", window.rect.point.x, window.rect.point.y, window.rect.size.width, window.rect.size.height);
 
-    struct CrossRect newWindowRect = {0, 0, 1024, 768};
+    int exit;
+    struct CrossInput input;
+    while (exit != 1)
+    {
+        input = GetInput();
+        //check if input is escape key
+        if (input.key == 9 && input.state == 1)
+        {
+            SendCloseEvent(&window);
+        }
 
-    SetWindowRect(&window, newWindowRect);
-
-    printf("--------------------\n");
-    printf("Window: %s\n", window.title);
-    printf("Window Rect: %d, %d, %d, %d\n", window.rect.point.x, window.rect.point.y, window.rect.size.width, window.rect.size.height);
-
-    SetWindowTitle(&window, "CrossWind 2");
-
-    printf("--------------------\n");
-    printf("Window: %s\n", window.title);
-    printf("Window Rect: %d, %d, %d, %d\n", window.rect.point.x, window.rect.point.y, window.rect.size.width, window.rect.size.height);
-
+        exit = Update();
+        
+    }
     DisposeWindow(&window);
 
     return 0;

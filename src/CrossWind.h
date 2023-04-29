@@ -32,6 +32,13 @@ struct CrossWindow
     const char* title;
 };
 
+struct CrossInput
+{
+    int key;
+    int state;
+};
+
+struct CrossInput GetInput();
 
 struct CrossWindow CreateWindow(struct CrossRect rect, const char* title);
 

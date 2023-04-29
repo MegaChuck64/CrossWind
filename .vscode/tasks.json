@@ -30,7 +30,7 @@
                 "command": "cl ${workspaceFolder}\\tester\\main.c ${workspaceFolder}\\output\\Crosswind_windows.o /Fe\"${workspaceFolder}\\output\\main.exe\";& \"${workspaceFolder}\\output\\main.exe\""
             },
             "linux": {
-                "command": "gcc tester/main.c output/CrossWind_linux.o -o output/build; ./output/build"
+                "command": "gcc tester/main.c output/CrossWind_linux.o -lX11 -o output/build; ./output/build"
             },
             "dependsOn": "build",
             "problemMatcher": [],
