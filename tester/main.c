@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+
 #include "../src/CrossWind.h"
 
 int main()
@@ -20,9 +22,12 @@ int main()
         input = GetInput();
         //check if input is escape key
         printf("Key: %s\n", input.key);
-        if (input.state == 1)
+        if (input.state == 1 )
         {
-            SendCloseEvent(&window);
+            if (strcmp(input.key, "Escape") == 0 || strcmp(input.key, "Esc") == 0)
+            {
+                SendCloseEvent(&window);
+            }
         }
 
         exit = Update(); 
