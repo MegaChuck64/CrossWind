@@ -24,7 +24,7 @@ int main()
         if (input.state == 1 )
         {
             printf("Key: %s\n", input.key);
-            if (strcmp(input.key, "Escape") == 0 || strcmp(input.key, "Esc") == 0)
+            if (strncmp(input.key, "Esc", 3) == 0)
             {
                 SendCloseEvent(&window);
             }
