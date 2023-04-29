@@ -17,7 +17,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
 extern struct CrossInput GetInput()
 {    
-    return win_input;
+    struct CrossInput temp_input;
+    temp_input.key = win_input.key;
+    temp_input.state = win_input.state;
+
+    win_input.state = 0;
+
+    return temp_input;
 }   
 
 extern struct CrossWindow GenerateWindow(struct CrossRect rect, const char *title)
