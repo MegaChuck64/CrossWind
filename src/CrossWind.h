@@ -42,8 +42,5 @@ struct CrossInput GetInput();
 
 struct CrossWindow GenerateWindow(struct CrossRect rect, const char* title);
 
-void SetWindowRect(struct CrossWindow* window, struct CrossRect rect);
-
-void SetWindowTitle(struct CrossWindow* window, const char* title);
 
 void DisposeWindow(struct CrossWindow* window);

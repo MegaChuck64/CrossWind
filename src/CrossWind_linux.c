@@ -56,18 +56,6 @@ extern void SendCloseEvent(struct CrossWindow* window)
     xdata.exit = 1;
 }
 
-extern void SetWindowRect(struct CrossWindow* window, struct CrossRect rect)
-{
-    window->rect = rect;
-}
-
-extern void SetWindowTitle(struct CrossWindow* window, const char* title)
-{
-    char* append = " - Linux implementation";
-    char* newTitle = concat(title, append);
-
-    window->title = newTitle;
-}
 
 extern int Update()
 {

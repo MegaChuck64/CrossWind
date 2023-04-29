@@ -124,19 +124,6 @@ extern int Update()
 
 }
 
-extern void SetWindowRect(struct CrossWindow *window, struct CrossRect rect)
-{
-    window->rect = rect;
-}
-
-extern void SetWindowTitle(struct CrossWindow *window, const char *title)
-{
-    char *append = " - Windows implementation";
-    char *newTitle = concat(title, append);
-
-    window->title = newTitle;
-}
-
 extern void DisposeWindow(struct CrossWindow *window)
 {
     free(window->title);
