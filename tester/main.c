@@ -3,7 +3,7 @@
 
 int main()
 {
-    struct CrossRect windowRect = {0, 0, 400, 400};
+    struct CrossRect windowRect = {100, 100, 400, 400};
 
     struct CrossWindow window;
 
