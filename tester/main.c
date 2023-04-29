@@ -20,10 +20,10 @@ int main()
     while (exit != 1)
     {
         input = GetInput();
-        //check if input is escape key
-        printf("Key: %s\n", input.key);
+        
         if (input.state == 1 )
         {
+            printf("Key: %s\n", input.key);
             if (strcmp(input.key, "Escape") == 0 || strcmp(input.key, "Esc") == 0)
             {
                 SendCloseEvent(&window);
