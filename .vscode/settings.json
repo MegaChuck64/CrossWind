@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.cj": "cpp",
+        "stdlib.h": "c"
+    }
+}

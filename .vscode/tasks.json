@@ -4,13 +4,20 @@
         {
             "label": "clean",
             "type": "shell",
+            "windows":{
+                "command": "(Remove-Item -ErrorAction Ignore -Recurse -Force output\\CrossWind_windows.o) -and (Remove-Item -ErrorAction Ignore -Recurse -Force output\\main.exe)"
+            },
             "linux": {
                 "command": "rm -f output/CrossWind_linux.o"
-            }
+            },
+
         },
         {
             "label": "build",
-            "type": "shell",
+            "type": "shell",            
+            "windows":{
+                "command": "cl /c ${workspaceFolder}\\src\\CrossWind_windows.c /Fo${workspaceFolder}\\output\\CrossWind_windows.o"
+            },
             "linux": {
                 "command": "gcc -c src/CrossWind_linux.c -o output/CrossWind_linux.o"
             },
@@ -18,7 +25,10 @@
         },
         {
             "label": "test",
-            "type": "shell",
+            "type": "shell",            
+            "windows":{
+                "command": "cl ${workspaceFolder}\\tester\\main.c ${workspaceFolder}\\output\\Crosswind_windows.o /Fe\"${workspaceFolder}\\output\\main.exe\";& \"${workspaceFolder}\\output\\main.exe\""
+            },
             "linux": {
                 "command": "gcc tester/main.c output/CrossWind_linux.o -o output/build; ./output/build"
             },

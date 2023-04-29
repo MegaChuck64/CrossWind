@@ -27,8 +27,7 @@ int main()
     printf("Window: %s\n", window.title);
     printf("Window Rect: %d, %d, %d, %d\n", window.rect.point.x, window.rect.point.y, window.rect.size.width, window.rect.size.height);
 
-
-
+    DisposeWindow(&window);
 
     return 0;
 }
