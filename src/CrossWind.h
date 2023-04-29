@@ -44,3 +44,5 @@ struct CrossWindow GenerateWindow(struct CrossRect rect, const char* title);
 
 
 void DisposeWindow(struct CrossWindow* window);
+
+void SendCloseEvent(struct CrossWindow* window);
