@@ -38,7 +38,9 @@ extern struct CrossWindow GenerateWindow(struct CrossRect rect, const char* titl
     xdata.screen = DefaultScreen(xdata.display);
 
     xdata.window = XCreateSimpleWindow(xdata.display, RootWindow(xdata.display, xdata.screen), rect.point.x, rect.point.y, rect.size.width, rect.size.height, 1, BlackPixel(xdata.display, xdata.screen), WhitePixel(xdata.display, xdata.screen));
-
+    
+    XStoreName(xdata.display, xdata.window, window.title);
+    
     XSelectInput(xdata.display, xdata.window, ExposureMask | KeyPressMask | KeyReleaseMask);
 
     xdata.gc = XCreateGC(xdata.display, xdata.window, 0, NULL);
