@@ -27,7 +27,7 @@
             "label": "test",
             "type": "shell",            
             "windows":{
-                "command": "cl ${workspaceFolder}\\tester\\main.c user32.lib kernel32.lib gdi32.lib ${workspaceFolder}\\output\\Crosswind_windows.o /Fe\"${workspaceFolder}\\output\\main.exe\";& \"${workspaceFolder}\\output\\main.exe\""
+                "command": "cl ${workspaceFolder}\\tester\\main.c user32.lib kernel32.lib gdi32.lib Winmm.lib ${workspaceFolder}\\output\\Crosswind_windows.o /Fe\"${workspaceFolder}\\output\\main.exe\";& \"${workspaceFolder}\\output\\main.exe\""
             },
             "linux": {
                 "command": "gcc tester/main.c output/CrossWind_linux.o -lX11 -o output/build; ./output/build"

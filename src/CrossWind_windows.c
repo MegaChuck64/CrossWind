@@ -62,6 +62,8 @@ extern struct CrossWindow GenerateWindow(struct CrossRect rect, const char *titl
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    UINT scancode;
+    char keyName[256];
     switch (uMsg)
     {
          case WM_CREATE:
@@ -72,12 +74,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             PostQuitMessage(0);
             return 0;
         case WM_KEYDOWN:
-            win_input.key = wParam;
-            win_input.state = 1;
+            scancode = MapVirtualKey(wParam, MAPVK_VK_TO_VSC);
+            if (GetKeyNameTextA(scancode << 16, keyName, sizeof(keyName)) != 0)
+            {
+                win_input.key = keyName;
+                win_input.state = 1;
+            }
+            
             return 0;
         case WM_KEYUP:
-            win_input.key = wParam;
-            win_input.state = 0;
+            scancode = MapVirtualKey(wParam, MAPVK_VK_TO_VSC);            
+            if (GetKeyNameTextA(scancode << 16, keyName, sizeof(keyName)) != 0)
+            {
+                win_input.key = keyName;
+                win_input.state = 0;
+            }
         default: 
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
