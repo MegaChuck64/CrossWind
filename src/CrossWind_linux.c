@@ -17,7 +17,7 @@ struct xData xdata;
 
 char* concat(const char* s1, const char* s2);
 
-extern struct CrossWindow CreateWindow(struct CrossRect rect, const char* title)
+extern struct CrossWindow GenerateWindow(struct CrossRect rect, const char* title)
 {
     char* append = " - Linux implementation";    
     char* newTitle = concat(title, append);

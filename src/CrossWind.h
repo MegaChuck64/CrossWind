@@ -40,7 +40,7 @@ struct CrossInput
 
 struct CrossInput GetInput();
 
-struct CrossWindow CreateWindow(struct CrossRect rect, const char* title);
+struct CrossWindow GenerateWindow(struct CrossRect rect, const char* title);
 
 void SetWindowRect(struct CrossWindow* window, struct CrossRect rect);
 

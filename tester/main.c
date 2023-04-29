@@ -7,7 +7,7 @@ int main()
 
     struct CrossWindow window;
 
-    window = CreateWindow(windowRect, "CrossWind");
+    window = GenerateWindow(windowRect, "CrossWind");
 
     printf("--------------------\n");
     printf("Window: %s\n", window.title);
@@ -19,13 +19,13 @@ int main()
     {
         input = GetInput();
         //check if input is escape key
-        if (input.key == 9 && input.state == 1)
+        printf("Key: %d\n", input.key);
+        if (input.state == 1)
         {
             SendCloseEvent(&window);
         }
 
-        exit = Update();
-        
+        exit = Update(); 
     }
     DisposeWindow(&window);
 
