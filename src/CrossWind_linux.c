@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/keysym.h>
 #include "CrossWind.h"
 
 struct xData {
@@ -37,7 +39,7 @@ extern struct CrossWindow GenerateWindow(struct CrossRect rect, const char* titl
 
     xdata.window = XCreateSimpleWindow(xdata.display, RootWindow(xdata.display, xdata.screen), rect.point.x, rect.point.y, rect.size.width, rect.size.height, 1, BlackPixel(xdata.display, xdata.screen), WhitePixel(xdata.display, xdata.screen));
 
-    XSelectInput(xdata.display, xdata.window, ExposureMask | KeyPressMask);
+    XSelectInput(xdata.display, xdata.window, ExposureMask | KeyPressMask | KeyReleaseMask);
 
     xdata.gc = XCreateGC(xdata.display, xdata.window, 0, NULL);
 
@@ -76,20 +78,27 @@ extern int Update()
 extern struct CrossInput GetInput()
 {
     struct CrossInput input;
-
-    if(xdata.event.type == KeyPress)
+    KeyCode keycode;
+    KeySym keysym;
+    
+    switch (xdata.event.type)
     {
-        input.key = xdata.event.xkey.keycode;
-        input.state = 1;
+        case KeyPress:
+            keycode = xdata.event.xkey.keycode;
+            keysym = XKeycodeToKeysym(xdata.display, keycode, 0);
+            input.key = XKeysymToString(keysym);
+            input.state = 1;
+            break;
+        case KeyRelease:
+            keycode = xdata.event.xkey.keycode;
+            keysym = XKeycodeToKeysym(xdata.display, keycode, 0);            
+            input.key = XKeysymToString(keysym);
+            input.state = 0;
+            break;
     }
-    else
-    {
-        input.key = 0;
-        input.state = 0;
-    }
-
     return input;
 }
+
 
 extern void DisposeWindow(struct CrossWindow* window)
 {

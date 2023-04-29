@@ -34,7 +34,7 @@ struct CrossWindow
 
 struct CrossInput
 {
-    int key;
+    char* key;
     int state;
 };
 

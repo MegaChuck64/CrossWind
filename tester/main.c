@@ -19,7 +19,7 @@ int main()
     {
         input = GetInput();
         //check if input is escape key
-        printf("Key: %d\n", input.key);
+        printf("Key: %s\n", input.key);
         if (input.state == 1)
         {
             SendCloseEvent(&window);
