@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "clean",
+            "type": "shell",
+            "linux": {
+                "command": "rm -f output/CrossWind_linux.o"
+            }
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "linux": {
+                "command": "gcc -c src/CrossWind_linux.c -o output/CrossWind_linux.o"
+            },
+            "dependsOn": "clean"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "linux": {
+                "command": "gcc tester/main.c output/CrossWind_linux.o -o output/build; ./output/build"
+            },
+            "dependsOn": "build",
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}
