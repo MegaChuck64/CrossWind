@@ -42,6 +42,11 @@ struct CrossInput GetInput();
 
 struct CrossWindow GenerateWindow(struct CrossRect rect, const char* title);
 
+int Update();
+
+void SetPixel(struct CrossWindow* window, struct CrossPoint point, struct CrossColor color);
+
+void SetPixels(struct CrossWindow* window, struct CrossPoint* points, struct CrossColor* colors, int count);
 
 void DisposeWindow(struct CrossWindow* window);
 

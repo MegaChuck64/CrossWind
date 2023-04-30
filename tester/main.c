@@ -28,9 +28,27 @@ int main()
             {
                 SendCloseEvent(&window);
             }
+            else if (strcmp(input.key, "Return") == 0 || strcmp(input.key, "Enter") == 0)
+            {
+                //draw 8 x 8 black square
+                struct CrossPoint points[64];
+                struct CrossColor colors[64];
+                int i;
+                for (i = 0; i < 64; i++)
+                {
+                    points[i].x = i % 8;
+                    points[i].y = i / 8;
+                    colors[i].r = 0;
+                    colors[i].g = 0;
+                    colors[i].b = 0;
+                    colors[i].a = 0;
+                }
+                SetPixels(&window, points, colors, 64);
+            }
         }
 
         exit = Update(); 
+        
     }
     DisposeWindow(&window);
 

@@ -65,6 +65,21 @@ extern int Update()
 
 }
 
+extern void SetPixel(struct CrossWindow* window, struct CrossPoint point, struct CrossColor color)
+{
+    XSetForeground(xdata.display, xdata.gc, color.r << 16 | color.g << 8 | color.b);
+    XDrawPoint(xdata.display, xdata.window, xdata.gc, point.x, point.y);
+}
+
+extern void SetPixels(struct CrossWindow* window, struct CrossPoint* points, struct CrossColor* colors, int count)
+{
+    int i;
+    for (i = 0; i < count; i++)
+    {
+        SetPixel(window, points[i], colors[i]);
+    }
+}
+
 extern struct CrossInput GetInput()
 {
     struct CrossInput input;
