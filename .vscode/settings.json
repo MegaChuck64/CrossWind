@@ -3,5 +3,6 @@
         "*.cj": "cpp",
         "stdlib.h": "c",
         "crosswind.h": "c"
-    }
+    },
+    "cmake.configureOnOpen": false
 }

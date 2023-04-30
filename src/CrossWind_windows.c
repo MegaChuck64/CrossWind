@@ -12,8 +12,6 @@ struct wData
 
 struct wData wdata;
 struct CrossInput win_input;
-char *concat(const char *s1, const char *s2);
-char *lower_string(char *string);
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
@@ -25,7 +23,8 @@ extern struct CrossInput GetInput()
 
     if (win_input.key != NULL)
     {
-        temp_input.key = lower_string(win_input.key);
+        temp_input.key = win_input.key;
+
     }
 
     win_input.state = 0;
@@ -89,6 +88,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         scancode = MapVirtualKey(wParam, MAPVK_VK_TO_VSC);
         if (GetKeyNameTextA(scancode << 16, keyName, sizeof(keyName)) != 0)
         {
+            lower_string(keyName, 256);
             win_input.key = keyName;
             win_input.state = 1;
         }
@@ -98,6 +98,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         scancode = MapVirtualKey(wParam, MAPVK_VK_TO_VSC);
         if (GetKeyNameTextA(scancode << 16, keyName, sizeof(keyName)) != 0)
         {
+            lower_string(keyName, 256);
             win_input.key = keyName;
             win_input.state = 0;
         }
@@ -189,31 +190,34 @@ extern void ClearWindow(struct CrossWindow *window, struct CrossColor color)
 
 extern void DisposeWindow(struct CrossWindow *window)
 {
-    free(window->title);
     DeleteObject(wdata.windowHandle);
-    window->title = NULL;
 }
 
-char *concat(const char *s1, const char *s2)
+char* concat (const char *s1, const char *s2)
 {
-    char *result = malloc(strlen(s1) + strlen(s2) + 1); //+1 for the zero-terminator
-    if (result == NULL)
+    static char result[100];
+    if (strlen(s1) + strlen(s2) < 100)
     {
-        fprintf(stderr, "Error: malloc failed in concat.\n");
-        exit(EXIT_FAILURE);
+        strcpy(result, s1);
+        strcat(result, s2);
     }
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
+    else
+    {
+        printf("Error: concat() result too long\n");
+    }
+
+    return result;    
 }
 
-char *lower_string(char *string)
+void lower_string(char* s, int len)
 {
-    int i = 0;
-    while (string[i])
-    {
-        string[i] = tolower(string[i]);
-        i++;
+    int i;
+    for (i = 0; i < len; i++)
+    {        
+        if (s[i] != '\0') {
+            s[i] = tolower(s[i]);
+        } else {
+            break;
+        }
     }
-    return string;
 }

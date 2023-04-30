@@ -16,7 +16,7 @@
             "label": "build",
             "type": "shell",            
             "windows":{
-                "command": "cl /c ${workspaceFolder}\\src\\CrossWind_windows.c /Fo${workspaceFolder}\\output\\CrossWind_windows.o"
+                "command": "cl /c /Zi ${workspaceFolder}\\src\\CrossWind_windows.c /Fo${workspaceFolder}\\output\\CrossWind_windows.o"
             },
             "linux": {
                 "command": "gcc -c src/CrossWind_linux.c -o output/CrossWind_linux.o"
@@ -27,7 +27,7 @@
             "label": "test",
             "type": "shell",            
             "windows":{
-                "command": "cl ${workspaceFolder}\\tester\\main.c user32.lib kernel32.lib gdi32.lib Winmm.lib ${workspaceFolder}\\output\\Crosswind_windows.o /Fe\"${workspaceFolder}\\output\\main.exe\";& \"${workspaceFolder}\\output\\main.exe\""
+                "command": "cl /Zi ${workspaceFolder}\\tester\\main.c user32.lib kernel32.lib gdi32.lib Winmm.lib ${workspaceFolder}\\output\\Crosswind_windows.o /Fe\"${workspaceFolder}\\output\\main.exe\";& \"${workspaceFolder}\\output\\main.exe\""
             },
             "linux": {
                 "command": "gcc tester/main.c output/CrossWind_linux.o -lX11 -o output/build; ./output/build"
