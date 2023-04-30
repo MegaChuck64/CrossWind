@@ -43,7 +43,7 @@ int main()
                     colors[i].b = 0;
                     colors[i].a = 0;
                 }
-                SetPixels(&window, points, colors, 64);
+                SetColors(&window, points, colors, 64);
             }
         }
 

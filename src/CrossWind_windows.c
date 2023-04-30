@@ -124,6 +124,29 @@ extern int Update()
 
 }
 
+extern void SetColor(struct CrossWindow *window, struct CrossPoint point, struct CrossColor color)
+{
+    HDC hdc = GetDC(wdata.windowHandle);
+
+    COLORREF c = RGB(color.r, color.g, color.b);
+    SetPixel(hdc, point.x, point.y, c);
+        
+    ReleaseDC(wdata.windowHandle, hdc);
+}
+
+extern void SetColors(struct CrossWindow *window, struct CrossPoint *points, struct CrossColor *colors, int count)
+{
+    HDC hdc = GetDC(wdata.windowHandle);
+
+    for (int i = 0; i < count; i++)
+    {
+        COLORREF c = RGB(colors[i].r, colors[i].g, colors[i].b);
+        SetPixel(hdc, points[i].x, points[i].y, c);
+    }
+
+    ReleaseDC(wdata.windowHandle, hdc);
+}
+
 extern void DisposeWindow(struct CrossWindow *window)
 {
     free(window->title);
