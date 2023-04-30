@@ -139,6 +139,21 @@ extern struct CrossInput GetInput()
     return input;
 }
 
+extern void DrawString(struct CrossWindow* window, struct CrossPoint point, const char* text, struct CrossColor color, const char* fontName)
+{
+    XFontStruct* fontInfo;
+    fontInfo = XLoadQueryFont(xdata.display, fontName);
+    char error_string[255];
+    if (!fontInfo) {
+        sprintf(error_string, "Error: XLoadQueryFont - failed loading font: %s\n", fontName);
+        fprintf(stderr, error_string);
+        return;
+    }
+    XSetFont(xdata.display, xdata.gc, fontInfo->fid);
+    XSetForeground(xdata.display, xdata.gc, color.r << 16 | color.g << 8 | color.b);
+    XDrawString(xdata.display, xdata.window, xdata.gc, point.x, point.y, text, strlen(text));    
+}
+
 extern void DisposeWindow(struct CrossWindow* window)
 {
     XFreeGC(xdata.display, xdata.gc);

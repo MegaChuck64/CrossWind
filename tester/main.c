@@ -36,7 +36,14 @@ int main()
             else if (strcmp(input.key, "t") == 0)
             {
                 //draw text
-                DrawString(&window, (struct CrossPoint){20, 20}, "Hello, World!", (struct CrossColor){255, 0, 0, 255}, "Arial");
+                char* fontName;
+                #ifdef _WIN32
+                    fontName = "Courier New";
+                #else
+                    fontName = "fixed";
+                #endif
+
+                DrawString(&window, (struct CrossPoint){20, 20}, "Hello, World!", (struct CrossColor){255, 0, 0, 255}, fontName);
             }
             else if (strcmp(input.key, "space") == 0)
             {
