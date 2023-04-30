@@ -66,7 +66,7 @@ void DisposeWindow(struct CrossWindow* window);
 
 void SendCloseEvent(struct CrossWindow* window);
 
-void DrawString(struct CrossWindow* window, struct CrossPoint point, const char* text, struct CrossColor color, const char* fontName);
+void DrawString(struct CrossWindow* window, struct CrossPoint point, const char* text, struct CrossColor color, const char* fontName, int fontSize);
 
 char* concat (const char *s1, const char *s2);
 

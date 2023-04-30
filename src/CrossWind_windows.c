@@ -188,20 +188,19 @@ extern void ClearWindow(struct CrossWindow *window, struct CrossColor color)
     ReleaseDC(wdata.windowHandle, hdc);
 }
 
-extern void DrawString(struct CrossWindow *window, struct CrossPoint point, const char *text, struct CrossColor color, const char* fontName)
+extern void DrawString(struct CrossWindow *window, struct CrossPoint point, const char *text, struct CrossColor color, const char* fontName, int fontSize)
 {
     HDC hdc = GetDC(wdata.windowHandle);
 
-    COLORREF c = RGB(color.r, color.g, color.b);
-    SetTextColor(hdc, c);
+    HFONT hFont = CreateFont(fontSize, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                             OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH,
+                             fontName);
 
-    HFONT hFont = CreateFont(30, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET,
-                             OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-                             DEFAULT_PITCH | FF_SWISS, fontName);
     SelectObject(hdc, hFont);
-
+    SetTextColor(hdc, RGB(color.r, color.g, color.b));
     TextOut(hdc, point.x, point.y, text, strlen(text));
 
+    DeleteObject(hFont);
     ReleaseDC(wdata.windowHandle, hdc);
 }
 

@@ -43,7 +43,7 @@ int main()
                     fontName = "fixed";
                 #endif
 
-                DrawString(&window, (struct CrossPoint){20, 20}, "Hello, World!", (struct CrossColor){255, 0, 0, 255}, fontName);
+                DrawString(&window, (struct CrossPoint){20, 20}, "Hello, World!", (struct CrossColor){255, 0, 0, 255}, fontName, 20);
             }
             else if (strcmp(input.key, "space") == 0)
             {
