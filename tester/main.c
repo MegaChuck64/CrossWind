@@ -11,42 +11,42 @@ int main()
 
     window = GenerateWindow(windowRect, "CrossWind");
 
-    printf("--------------------\n");
-    printf("Window: %s\n", window.title);
-    printf("Window Rect: %d, %d, %d, %d\n", window.rect.point.x, window.rect.point.y, window.rect.size.width, window.rect.size.height);
-
     int exit;
     struct CrossInput input;
     int offset = 0;
-    while (exit != 1)
+    while (Update() != 1)
     {
         input = GetInput();
         
-        if (input.state == 1 )
+        if (input.state == 1)
         {
-            printf("Key: %s\n", input.key);
             if (strncmp(input.key, "esc", 3) == 0)
             {
+                //close window
                 SendCloseEvent(&window);
             }
             else if (strcmp(input.key, "return") == 0 || strcmp(input.key, "enter") == 0)
             {
-                //draw 8 x 8 black square using SetColorRect
+                //draw black 8x8 squares diagonally across window
                 struct CrossRect rect = {offset * 8, offset * 8, 8, 8};
                 SetColorRect(&window, rect, (struct CrossColor){0, 0, 0, 255});
                 
                 offset++;
             }
+            else if (strcmp(input.key, "t") == 0)
+            {
+                //draw text
+                DrawString(&window, (struct CrossPoint){20, 20}, "Hello, World!", (struct CrossColor){255, 0, 0, 255}, "Arial");
+            }
             else if (strcmp(input.key, "space") == 0)
             {
+                //clear window with white color
                 ClearWindow(&window, (struct CrossColor){255, 255, 255, 255});
                 offset = 0;
             }
         }
-
-        exit = Update(); 
-        
     }
+
     DisposeWindow(&window);
 
     return 0;
