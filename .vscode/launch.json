@@ -2,6 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Linux",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/output/build",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
             "name": "Windows",
             "type": "cppvsdbg",
             "request": "launch",

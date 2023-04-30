@@ -11,7 +11,6 @@ int main()
 
     window = GenerateWindow(windowRect, "CrossWind");
 
-    int exit;
     struct CrossInput input;
     int offset = 0;
     while (Update() != 1)

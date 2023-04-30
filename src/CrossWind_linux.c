@@ -5,6 +5,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
+#include <X11/Xft/Xft.h>
 #include "CrossWind.h"
 
 struct xData {
@@ -139,19 +140,33 @@ extern struct CrossInput GetInput()
     return input;
 }
 
-extern void DrawString(struct CrossWindow* window, struct CrossPoint point, const char* text, struct CrossColor color, const char* fontName)
+extern void DrawString(struct CrossWindow* window, struct CrossPoint point, const char* text, struct CrossColor color, const char* fontName, int fontSize)
 {
-    XFontStruct* fontInfo;
-    fontInfo = XLoadQueryFont(xdata.display, fontName);
-    char error_string[255];
-    if (!fontInfo) {
-        sprintf(error_string, "Error: XLoadQueryFont - failed loading font: %s\n", fontName);
-        fprintf(stderr, error_string);
+    if (!window) {
+        printf("Error: Invalid window pointer\n");
         return;
     }
-    XSetFont(xdata.display, xdata.gc, fontInfo->fid);
-    XSetForeground(xdata.display, xdata.gc, color.r << 16 | color.g << 8 | color.b);
-    XDrawString(xdata.display, xdata.window, xdata.gc, point.x, point.y, text, strlen(text));    
+
+    XftFont *font;
+    font = XftFontOpenName(xdata.display, DefaultScreen(xdata.display), fontName);
+    font->height = fontSize * 64; // Set font size in pixels
+
+    // Create a color using Xft
+    XftColor col;
+    XRenderColor xcolor = {color.r << 8, color.g << 8, color.b << 8, 0xFFFF};
+    XftColorAllocValue(xdata.display, DefaultVisual(xdata.display, DefaultScreen(xdata.display)), DefaultColormap(xdata.display, DefaultScreen(xdata.display)), &xcolor, &col);
+
+    // Draw the text to the window
+    XftDraw *xftdraw = XftDrawCreate(xdata.display, xdata.window, DefaultVisual(xdata.display, DefaultScreen(xdata.display)), DefaultColormap(xdata.display, DefaultScreen(xdata.display)));
+    XftDrawStringUtf8(xftdraw, &col, font, point.x, point.y, (XftChar8*)text, strlen(text));
+
+    // Flush changes to the window
+    XFlush(xdata.display);
+
+    // Cleanup
+    XftDrawDestroy(xftdraw);
+    XftColorFree(xdata.display, DefaultVisual(xdata.display, DefaultScreen(xdata.display)), DefaultColormap(xdata.display, DefaultScreen(xdata.display)), &col);
+    XftFontClose(xdata.display, font);
 }
 
 extern void DisposeWindow(struct CrossWindow* window)
