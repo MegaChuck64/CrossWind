@@ -159,27 +159,19 @@ extern void SetColorPoints(struct CrossWindow* window, struct CrossColorPoints p
 
 extern void SetColorRect(struct CrossWindow* window, struct CrossRect rect, struct CrossColor color)
 {
-    struct CrossColorPoints colorPoints;
-    int sz = rect.size.width * rect.size.height;
-    colorPoints.colors = malloc(sizeof(struct CrossColor) * sz);
-    colorPoints.points = malloc(sizeof(struct CrossPoint) * sz);
-    colorPoints.count = sz;
+    HDC hdc = GetDC(wdata.windowHandle);
 
-    int index = 0;
-    for (int y = rect.point.y; y < rect.point.y + rect.size.height; y++)
-    {
-        for (int x = rect.point.x; x < rect.point.x + rect.size.width; x++)
-        {
-            colorPoints.colors[index] = color;
-            colorPoints.points[index] = (struct CrossPoint){x, y};
-            index++;
-        }
-    }
+    RECT r;
+    r.left = rect.point.x;
+    r.top = rect.point.y;
+    r.right = rect.point.x + rect.size.width;
+    r.bottom = rect.point.y + rect.size.height;
 
-    SetColorPoints(&window, colorPoints);
+    HBRUSH brush = CreateSolidBrush(RGB(color.r, color.g, color.b));
+    FillRect(hdc, &r, brush);
+    DeleteObject(brush);
 
-    free(colorPoints.colors);
-    free(colorPoints.points);
+    ReleaseDC(wdata.windowHandle, hdc);
 }
 
 extern void ClearWindow(struct CrossWindow *window, struct CrossColor color)

@@ -65,3 +65,7 @@ void ClearWindow(struct CrossWindow* window, struct CrossColor color);
 void DisposeWindow(struct CrossWindow* window);
 
 void SendCloseEvent(struct CrossWindow* window);
+
+char* concat (const char *s1, const char *s2);
+
+void lower_string(char* s, int len);

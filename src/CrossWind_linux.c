@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
@@ -16,8 +17,6 @@ struct xData {
 };
 
 struct xData xdata;
-
-char* concat(const char* s1, const char* s2);
 
 extern struct CrossWindow GenerateWindow(struct CrossRect rect, const char* title)
 {
@@ -80,6 +79,28 @@ extern void SetColors(struct CrossWindow* window, struct CrossPoint* points, str
     }
 }
 
+void SetColorPoints(struct CrossWindow* window, struct CrossColorPoints points)
+{
+    SetColors(window, points.points, points.colors, points.count);
+}
+
+void SetColorRect(struct CrossWindow* window, struct CrossRect rect, struct CrossColor color)
+{
+    XSetForeground(xdata.display, xdata.gc, color.r << 16 | color.g << 8 | color.b);
+    XFillRectangle(xdata.display, xdata.window, xdata.gc, rect.point.x, rect.point.y, rect.size.width, rect.size.height);
+}
+
+void ClearWindow(struct CrossWindow* window, struct CrossColor color)
+{
+    struct CrossRect rect;
+    rect.point.x = 0;
+    rect.point.y = 0;
+    rect.size.width = window->rect.size.width;
+    rect.size.height = window->rect.size.height;
+
+    SetColorRect(window, rect, color);
+}
+
 extern struct CrossInput GetInput()
 {
     struct CrossInput input;
@@ -91,41 +112,62 @@ extern struct CrossInput GetInput()
         case KeyPress:
             keycode = xdata.event.xkey.keycode;
             keysym = XKeycodeToKeysym(xdata.display, keycode, 0);
-            input.key = XKeysymToString(keysym);
+            if (keysym != NULL)
+            {
+                char* key = XKeysymToString(keysym);
+                char buffer[20];
+                strcpy(buffer, key);
+                lower_string(buffer, 20);
+                input.key = buffer;
+            }
             input.state = 1;
             break;
         case KeyRelease:
             keycode = xdata.event.xkey.keycode;
-            keysym = XKeycodeToKeysym(xdata.display, keycode, 0);            
-            input.key = XKeysymToString(keysym);
+            keysym = XKeycodeToKeysym(xdata.display, keycode, 0);    
+            if (keysym != NULL)
+            {
+                char* key = XKeysymToString(keysym);
+                char buffer[20];
+                strcpy(buffer, key);
+                lower_string(buffer, 20);
+                input.key = buffer;
+            }
             input.state = 0;
             break;
     }
     return input;
 }
 
-
 extern void DisposeWindow(struct CrossWindow* window)
 {
-    free(window->title);
-
     XFreeGC(xdata.display, xdata.gc);
     XDestroyWindow(xdata.display, xdata.window);
     XCloseDisplay(xdata.display);
-
-
-    window->title = NULL;
 }
+
 
 char* concat (const char *s1, const char *s2)
 {
-    char *result = malloc(strlen(s1)+strlen(s2)+1);//+1 for the zero-terminator
-    if(result == NULL)
+    static char result[100];
+    if (strlen(s1) + strlen(s2) < 100)
     {
-        fprintf(stderr, "Error: malloc failed in concat.\n");
-        exit(EXIT_FAILURE);
+        strcpy(result, s1);
+        strcat(result, s2);
     }
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
+    else
+    {
+        printf("Error: concat() result too long\n");
+    }
+
+    return result;    
+}
+
+void lower_string(char* s, int len)
+{
+    int i;
+    for (i = 0; i < len; i++)
+    {        
+        s[i] = tolower(s[i]);
+    }
 }
