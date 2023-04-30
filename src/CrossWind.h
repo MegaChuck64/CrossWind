@@ -6,6 +6,14 @@ struct CrossColor
     char a;
 };
 
+struct CrossColorPoints
+{
+    struct CrossColor* colors;
+    struct CrossPoint* points;
+    int count;
+};
+
+
 struct CrossPoint
 {
     int x;
@@ -47,6 +55,12 @@ int Update();
 void SetColor(struct CrossWindow* window, struct CrossPoint point, struct CrossColor color);
 
 void SetColors(struct CrossWindow* window, struct CrossPoint* points, struct CrossColor* colors, int count);
+
+void SetColorPoints(struct CrossWindow* window, struct CrossColorPoints points);
+
+void SetColorRect(struct CrossWindow* window, struct CrossRect rect, struct CrossColor color);
+
+void ClearWindow(struct CrossWindow* window, struct CrossColor color);
 
 void DisposeWindow(struct CrossWindow* window);
 

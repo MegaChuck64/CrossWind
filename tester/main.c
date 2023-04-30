@@ -17,6 +17,7 @@ int main()
 
     int exit;
     struct CrossInput input;
+    int offset = 0;
     while (exit != 1)
     {
         input = GetInput();
@@ -24,26 +25,22 @@ int main()
         if (input.state == 1 )
         {
             printf("Key: %s\n", input.key);
-            if (strncmp(input.key, "Esc", 3) == 0)
+            if (strncmp(input.key, "esc", 3) == 0)
             {
                 SendCloseEvent(&window);
             }
-            else if (strcmp(input.key, "Return") == 0 || strcmp(input.key, "Enter") == 0)
+            else if (strcmp(input.key, "return") == 0 || strcmp(input.key, "enter") == 0)
             {
-                //draw 8 x 8 black square
-                struct CrossPoint points[64];
-                struct CrossColor colors[64];
-                int i;
-                for (i = 0; i < 64; i++)
-                {
-                    points[i].x = i % 8;
-                    points[i].y = i / 8;
-                    colors[i].r = 0;
-                    colors[i].g = 0;
-                    colors[i].b = 0;
-                    colors[i].a = 0;
-                }
-                SetColors(&window, points, colors, 64);
+                //draw 8 x 8 black square using SetColorRect
+                struct CrossRect rect = {offset * 8, offset * 8, 8, 8};
+                SetColorRect(&window, rect, (struct CrossColor){0, 0, 0, 255});
+                
+                offset++;
+            }
+            else if (strcmp(input.key, "space") == 0)
+            {
+                ClearWindow(&window, (struct CrossColor){255, 255, 255, 255});
+                offset = 0;
             }
         }
 
