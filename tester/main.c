@@ -5,41 +5,42 @@
 
 
 
-void game_loop(struct CrossInput input, struct CrossWindow window)
+void game_loop(struct CrossInput* input, struct CrossWindow* window)
 {
     static int x = 0;
     static int y = 0;
 
     ClearWindow(&window, (struct CrossColor){255, 255, 255, 255});
 
-    if (input.keyState == 1)
+    if (input->keyState == 1)
     {
-        if (strcmp(input.key, "w") == 0)
+        printf("key: %s\n", input->key);
+        if (strcmp(input->key, "w") == 0)
         {
             y -= 1;
         }
-        if (strcmp(input.key, "s") == 0)
+        if (strcmp(input->key, "s") == 0)
         {
             y += 1;
         }
-        if (strcmp(input.key, "a") == 0)
+        if (strcmp(input->key, "a") == 0)
         {
             x -= 1;
         }
-        if (strcmp(input.key, "d") == 0)
+        if (strcmp(input->key, "d") == 0)
         {
             x += 1;
         }
-        if (strcmp(input.key, "esc") == 0)
+        if (strncmp(input->key, "esc", 3) == 0)
         {
             SendCloseEvent(&window);
         }
     }
 
-    if (input.mouseState == 1)
+    if (input->mouseState == 1)
     {
-        x = input.mousePoint.x;
-        y = input.mousePoint.y;        
+        x = input->mousePoint.x;
+        y = input->mousePoint.y;        
     }
 
     SetColorRect(&window, (struct CrossRect){x, y, 64, 64}, (struct CrossColor){0, 0, 0, 255});
@@ -61,9 +62,11 @@ int main()
 {
     struct CrossWindow window = GenerateWindow((struct CrossRect){ 40, 40, 800, 600 } , "CrossWind");
 
+    struct CrossInput input;
     while (Update() != 1)
     {
-        game_loop(GetInput(), window); 
+        input = GetInput();
+        game_loop(&input, &window);
     }
 
     DisposeWindow(&window);

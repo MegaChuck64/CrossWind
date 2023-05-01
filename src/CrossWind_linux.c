@@ -41,7 +41,7 @@ extern struct CrossWindow GenerateWindow(struct CrossRect rect, const char* titl
     
     XStoreName(xdata.display, xdata.window, window.title);
     
-    XSelectInput(xdata.display, xdata.window, ExposureMask | KeyPressMask | KeyReleaseMask);
+    XSelectInput(xdata.display, xdata.window, ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask | StructureNotifyMask);
 
     xdata.gc = XCreateGC(xdata.display, xdata.window, 0, NULL);
 
@@ -104,38 +104,51 @@ void ClearWindow(struct CrossWindow* window, struct CrossColor color)
 
 extern struct CrossInput GetInput()
 {
-    struct CrossInput input;
+    struct CrossInput input = {0};
     KeyCode keycode;
     KeySym keysym;
+    int MAX_BUFFER_SIZE = 16;
+    char buffer[MAX_BUFFER_SIZE];
     
     switch (xdata.event.type)
     {
         case KeyPress:
             keycode = xdata.event.xkey.keycode;
             keysym = XKeycodeToKeysym(xdata.display, keycode, 0);
-            if (keysym != NULL)
+            if (keysym != NoSymbol)
             {
                 char* key = XKeysymToString(keysym);
-                char buffer[20];
-                strcpy(buffer, key);
-                lower_string(buffer, 20);
-                input.key = buffer;
+                strncpy(buffer, key, MAX_BUFFER_SIZE - 1);
+                buffer[MAX_BUFFER_SIZE - 1] = '\0';
+                lower_string(buffer, MAX_BUFFER_SIZE);
+                strcpy(input.key, buffer);
             }
             input.keyState = 1;
             break;
         case KeyRelease:
             keycode = xdata.event.xkey.keycode;
-            keysym = XKeycodeToKeysym(xdata.display, keycode, 0);    
-            if (keysym != NULL)
+            keysym = XKeycodeToKeysym(xdata.display, keycode, 0);
+            if (keysym != NoSymbol)
             {
                 char* key = XKeysymToString(keysym);
-                char buffer[20];
-                strcpy(buffer, key);
-                lower_string(buffer, 20);
-                input.key = buffer;
+                strncpy(buffer, key, MAX_BUFFER_SIZE - 1);
+                buffer[MAX_BUFFER_SIZE - 1] = '\0';
+                lower_string(buffer, MAX_BUFFER_SIZE);
+                strcpy(input.key, buffer);
             }
             input.keyState = 0;
             break;
+        case ButtonPress:
+            input.mouseState = 1;
+            break;
+        case ButtonRelease:
+            input.mouseState = 0;
+            break;
+        case MotionNotify:
+            input.mousePoint.x = xdata.event.xmotion.x;
+            input.mousePoint.y = xdata.event.xmotion.y;
+            break;        
+
     }
     return input;
 }
@@ -177,27 +190,29 @@ extern void DisposeWindow(struct CrossWindow* window)
 }
 
 
-char* concat (const char *s1, const char *s2)
+char* concat(const char* s1, const char* s2)
 {
     static char result[100];
     if (strlen(s1) + strlen(s2) < 100)
     {
         strcpy(result, s1);
         strcat(result, s2);
+        result[strlen(s1) + strlen(s2)] = '\0';
     }
     else
     {
         printf("Error: concat() result too long\n");
     }
 
-    return result;    
+    return result;
 }
 
 void lower_string(char* s, int len)
 {
     int i;
     for (i = 0; i < len; i++)
-    {        
+    {
         s[i] = tolower(s[i]);
     }
+    s[len] = '\0';
 }

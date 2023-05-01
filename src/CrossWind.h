@@ -42,7 +42,7 @@ struct CrossWindow
 
 struct CrossInput
 {
-    char* key;
+    char key[16];
     int keyState;
     struct CrossPoint mousePoint;
     int mouseState;
