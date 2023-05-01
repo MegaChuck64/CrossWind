@@ -121,7 +121,7 @@ extern struct CrossInput GetInput()
                 lower_string(buffer, 20);
                 input.key = buffer;
             }
-            input.state = 1;
+            input.keyState = 1;
             break;
         case KeyRelease:
             keycode = xdata.event.xkey.keycode;
@@ -134,7 +134,7 @@ extern struct CrossInput GetInput()
                 lower_string(buffer, 20);
                 input.key = buffer;
             }
-            input.state = 0;
+            input.keyState = 0;
             break;
     }
     return input;

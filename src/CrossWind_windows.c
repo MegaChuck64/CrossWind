@@ -19,7 +19,7 @@ extern struct CrossInput GetInput()
 {
     struct CrossInput temp_input;
     temp_input.key = NULL;
-    temp_input.state = win_input.state;
+    temp_input.keyState = win_input.keyState;    
 
     if (win_input.key != NULL)
     {
@@ -27,7 +27,12 @@ extern struct CrossInput GetInput()
 
     }
 
-    win_input.state = 0;
+    temp_input.mousePoint = win_input.mousePoint;
+    temp_input.mouseState = win_input.mouseState;
+
+    win_input.mouseState = 0;
+
+    win_input.keyState = 0;
     return temp_input;
 }
 
@@ -90,7 +95,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             lower_string(keyName, 256);
             win_input.key = keyName;
-            win_input.state = 1;
+            win_input.keyState = 1;
         }
 
         return 0;
@@ -100,8 +105,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             lower_string(keyName, 256);
             win_input.key = keyName;
-            win_input.state = 0;
+            win_input.keyState = 0;
         }
+        return 0;
+    case WM_LBUTTONDOWN:
+        win_input.mouseState = 1;
+        win_input.mousePoint = (struct CrossPoint){LOWORD(lParam), HIWORD(lParam)};
+        return 0;
+    case WM_LBUTTONUP:
+        win_input.mouseState = 0;
+        win_input.mousePoint = (struct CrossPoint){LOWORD(lParam), HIWORD(lParam)};
+        return 0;
     default:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
